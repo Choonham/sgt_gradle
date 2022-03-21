@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="input">
+    <parameterMap id="insertMap" type="com.sgt.crud_toy.vo.InputVo">
+        <parameter property="inputCode" jdbcType="INTEGER" javaType="int" mode="IN"/>
+        <parameter property="inputIp" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>
+
+        <parameter property="resultCode" jdbcType="INTEGER" javaType="int" mode="OUT"/>
+    </parameterMap>
+
+    <insert id="insertInput" parameterMap="insertMap" statementType="CALLABLE">
+        {call sp_insert_input(?, ?, ?)}
+    </insert>
+
+    <parameterMap id="updateMap" type="com.sgt.crud_toy.vo.InputVo">
+        <parameter property="inputID" jdbcType="INTEGER" javaType="int" mode="IN"/>
+        <parameter property="inputCode" jdbcType="INTEGER" javaType="int" mode="IN"/>
+
+        <parameter property="resultCode" jdbcType="INTEGER" javaType="int" mode="OUT"/>
+    </parameterMap>
+
+    <update id="updateInput" parameterMap="updateMap" statementType="CALLABLE">
+        {call sp_update_input(?,?, ?)}
+    </update>
+
+    <parameterMap id="deleteMap" type="com.sgt.crud_toy.vo.InputVo">
+        <parameter property="inputID" jdbcType="INTEGER" javaType="int" mode="IN"/>
+
+        <parameter property="resultCode" jdbcType="INTEGER" javaType="int" mode="OUT"/>
+    </parameterMap>
+
+    <update id="deleteInput" parameterMap="deleteMap" statementType="CALLABLE">
+        {call sp_delete_input(?, ?)}
+    </update>
+
+    <select id="getInputList" parameterType="com.sgt.crud_toy.vo.InputVo" resultType="com.sgt.crud_toy.vo.InputVo">
+        SELECT
+            a.inputID,
+            b.keyName,
+            a.inputIp
+        FROM inputs a
+        LEFT OUTER JOIN keyCodes b
+        ON a.inputCode = b.keyCode
+        WHERE inputIp = #{inputIp}
+        AND state = 1
+        ORDER BY a.inputID
+    </select>
+
+</mapper>
